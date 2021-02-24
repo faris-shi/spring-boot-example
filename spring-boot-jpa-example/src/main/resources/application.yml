@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres
+    hikari:
+      #maximum number of milliseconds that a client will wait for a connection
+      connection-timeout: 20000
+      #minimum number of idle connections maintained by HikariCP in a connection pool
+      minimum-idle: 10
+      #maximum idle time for connection
+      idle-timeout: 10000
+      #maximum pool size
+      maximum-pool-size: 10
+  jpa:
+    show-sql: true
+    database: postgresql
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop
