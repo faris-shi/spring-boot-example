@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
@@ -19,4 +18,21 @@ public class EnrolmentId implements Serializable {
 
     @Column(name = "course_id", updatable = false, nullable = false)
     private Long courseId;
+
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
 }

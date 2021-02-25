@@ -1,5 +1,9 @@
 package com.github.faris.example.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,6 +15,9 @@ import java.io.Serializable;
                 columnNames = "card_number"
         )
 )
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentIdCard implements Serializable {
 
     @Id
@@ -25,10 +32,6 @@ public class StudentIdCard implements Serializable {
     @Column(name = "photo", nullable = false)
     private String photo;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "student_id",
-            foreignKey = @ForeignKey(name = "student_id_card_student_id_fk")
-    )
+    @OneToOne(mappedBy = "studentIdCard")
     private Student student;
 }

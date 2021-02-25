@@ -23,7 +23,9 @@ public class Enrolment implements Serializable {
             name = "course_id",
             foreignKey = @ForeignKey(
                     name = "enrolment_course_id_fk"
-            )
+            ),
+            updatable = false,
+            nullable = false
     )
     private Course course;
 
@@ -33,7 +35,9 @@ public class Enrolment implements Serializable {
             name = "student_id",
             foreignKey = @ForeignKey(
                     name = "enrolment_student_id_fk"
-            )
+            ),
+            updatable = false,
+            nullable = false
     )
     private Student student;
 }

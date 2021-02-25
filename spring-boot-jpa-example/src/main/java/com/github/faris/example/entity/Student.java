@@ -17,16 +17,22 @@ import static javax.persistence.GenerationType.*;
 @Entity(name = "Student")
 @Table(
         name = "student",
-        uniqueConstraints = @UniqueConstraint(
-                name = "student_email_uk",
-                columnNames = "email"
-        )
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "student_email_uk",
+                        columnNames = "email"
+                ),
+                @UniqueConstraint(
+                        name = "student_student_id_card_id_uk",
+                        columnNames = "student_id_card_id"
+                )
+        }
 )
 public class Student implements Serializable {
 
     @Id
     @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence")
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(strategy = SEQUENCE, generator = "student_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
 
@@ -42,9 +48,19 @@ public class Student implements Serializable {
     @Column(name = "age", nullable = false)
     private Integer age;
 
-    @OneToOne(mappedBy = "student", orphanRemoval = true)
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "student_id_card_id",
+            foreignKey = @ForeignKey(name = "student_student_id_card_id_fk"),
+            nullable = false,
+            updatable = false
+    )
     private StudentIdCard studentIdCard;
 
     @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Enrolment> enrolments = new ArrayList<>();
+
+    @OneToMany
+    private List<Hobby> hobbys;
 }
