@@ -1,26 +1,16 @@
 package com.github.faris.example.security;
 
+import com.github.faris.example.service.UserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.github.faris.example.security.UserPermission.STUDENT_READ;
-import static com.github.faris.example.security.UserPermission.STUDENT_WRITE;
-import static com.github.faris.example.security.UserRole.*;
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author faris
@@ -30,12 +20,14 @@ import static java.util.stream.Collectors.toList;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     private final PasswordEncoder passwordEncoder;
 
+    private final UserLoginService userLoginService;
+
     @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, UserLoginService userLoginService) {
         this.passwordEncoder = passwordEncoder;
+        this.userLoginService = userLoginService;
     }
 
     @Override
@@ -51,27 +43,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.builder()
-                        .username("faris.shi")
-                        .password(passwordEncoder.encode("Rachel!@#1234"))
-                        .roles(STUDENT.name())
-                        .authorities(STUDENT.getGrantedAuthorities())
-                        .build(),
-                User.builder()
-                        .username("yang.hai")
-                        .password(passwordEncoder.encode("Rachel!@#1234"))
-                        .roles(ADMIN.name())
-                        .authorities(ADMIN.getGrantedAuthorities())
-                        .build(),
-                User.builder()
-                        .username("rachel.shi")
-                        .password(passwordEncoder.encode("Rachel!@#1234"))
-                        .roles(ADMIN_TRAINEE.name())
-                        .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
-                        .build()
-        );
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
     }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(userLoginService);
+        return provider;
+    }
+
+
 }
