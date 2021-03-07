@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.faris</groupId>
-    <artifactId>spring-security-example</artifactId>
+    <artifactId>spring-security-basic-auth-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-security-example</name>
+    <name>spring-security-basic-auth-rest</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
