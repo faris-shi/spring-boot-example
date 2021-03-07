@@ -22,4 +22,8 @@ public class StudentService {
     public Optional<Student> getStudentById(Long id) {
         return STUDENTS.stream().filter(student -> student.getId().equals(id)).findAny();
     }
+
+    public List<Student> getAllStudents(){
+        return STUDENTS;
+    }
 }
